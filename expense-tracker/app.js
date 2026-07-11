@@ -171,7 +171,7 @@ function validate() {
     valid = false;
   }
 
-  const amt = parseFloat(els.amount.value);
+  const amt = parseRp(els.amount.value);
   if (!els.amount.value || isNaN(amt) || amt <= 0) {
     els.errAmount.textContent = 'Masukkan jumlah yang valid (lebih dari 0).';
     els.amount.classList.add('error');
@@ -189,8 +189,8 @@ function addTransaction(e) {
   const tx = {
     id:       Date.now().toString(),
     name:     els.itemName.value.trim(),
-    amount:   parseFloat(parseFloat(els.amount.value).toFixed(2)),
-    type:     els.type.value,           // 'income' | 'expense'
+    amount:   parseRp(els.amount.value),
+    type:     els.type.value,
     category: els.category.value,
     date:     els.date.value || new Date().toISOString().split('T')[0],
   };
@@ -234,6 +234,14 @@ function calcTotals() {
 function fmt(n) {
   const sign = n < 0 ? '-' : '';
   return `${sign}Rp${Math.abs(n).toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+}
+
+/* Strip titik ribuan & koma desimal → angka murni */
+function parseRp(str) {
+  if (!str) return NaN;
+  // hapus semua titik (pemisah ribuan), ganti koma desimal → titik
+  const clean = String(str).replace(/\./g, '').replace(',', '.');
+  return parseFloat(clean);
 }
 
 function fmtRp(n) {
@@ -480,6 +488,15 @@ function bindEvents() {
 
   // clear all
   els.clearAll.addEventListener('click', clearAll);
+
+  // auto-format amount input dengan titik ribuan
+  els.amount.addEventListener('input', () => {
+    // ambil hanya angka
+    const digits = els.amount.value.replace(/\D/g, '');
+    if (!digits) { els.amount.value = ''; return; }
+    // format dengan titik ribuan
+    els.amount.value = parseInt(digits, 10).toLocaleString('id-ID');
+  });
 
   // budget
   els.setBudget.addEventListener('click', setBudget);
