@@ -233,7 +233,16 @@ function calcTotals() {
 
 function fmt(n) {
   const sign = n < 0 ? '-' : '';
-  return `${sign}Rp${Math.abs(n).toLocaleString('id-ID')}`;
+  return `${sign}Rp${Math.abs(n).toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+}
+
+function fmtRp(n) {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(n).replace('IDR', 'Rp');
 }
 
 /* ─── RENDER BALANCE ─────────────────────────────────── */
@@ -313,7 +322,7 @@ function renderChart() {
               label: ctx => {
                 const total = ctx.dataset.data.reduce((a,b) => a+b, 0);
                 const pct   = ((ctx.parsed / total) * 100).toFixed(1);
-                return ` ${ctx.label}: Rp${ctx.parsed.toLocaleString('id-ID')} (${pct}%)`;
+                return ` ${ctx.label}: Rp${ctx.parsed.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} (${pct}%)`;
               },
             },
           },
@@ -394,7 +403,7 @@ function renderList() {
             <span class="tx-date">${formatDate(tx.date)}</span>
           </div>
         </div>
-        <div class="tx-amount ${cls}">${sign}Rp${tx.amount.toLocaleString('id-ID')}</div>
+        <div class="tx-amount ${cls}">${sign}Rp${tx.amount.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
         <button class="tx-delete" data-id="${tx.id}" aria-label="Hapus ${escHtml(tx.name)}">Hapus</button>
       </div>`;
   }).join('');
