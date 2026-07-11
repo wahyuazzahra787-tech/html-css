@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="id" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Expense &amp; Budget Visualizer</title>
+  <title>Pencatat Pengeluaran &amp; Anggaran</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
@@ -14,7 +14,7 @@
     <div class="header-inner">
       <div class="header-left">
         <span class="header-icon">💸</span>
-        <h1 class="header-title">Expense &amp; Budget Visualizer</h1>
+        <h1 class="header-title">Pencatat Pengeluaran &amp; Anggaran</h1>
       </div>
       <button id="theme-toggle" class="icon-btn" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
         <span id="theme-icon">🌙</span>
@@ -27,18 +27,18 @@
 
     <!-- TOTAL BALANCE -->
     <section class="balance-card" aria-label="Total Balance">
-      <div class="balance-label">TOTAL BALANCE</div>
-      <div class="balance-amount" id="total-balance">$0.00</div>
+      <div class="balance-label">TOTAL SALDO</div>
+      <div class="balance-amount" id="total-balance">Rp0</div>
       <div class="balance-meta">
-        <span class="meta-item income">↑ Income: <strong id="total-income">$0.00</strong></span>
-        <span class="meta-item expense">↓ Expenses: <strong id="total-expense">$0.00</strong></span>
+        <span class="meta-item income">↑ Pemasukan: <strong id="total-income">Rp0</strong></span>
+        <span class="meta-item expense">↓ Pengeluaran: <strong id="total-expense">Rp0</strong></span>
       </div>
     </section>
 
     <!-- BUDGET WARNING BANNER -->
     <div id="budget-warning" class="budget-warning hidden" role="alert">
-      ⚠️ <strong>Warning!</strong> Your expenses have exceeded the budget limit of
-      <strong id="warning-limit">$0.00</strong>
+      ⚠️ <strong>Peringatan!</strong> Pengeluaran kamu sudah melebihi batas anggaran sebesar
+      <strong id="warning-limit">Rp0</strong>
     </div>
 
     <!-- TOP ROW: Form + Chart -->
@@ -46,61 +46,61 @@
 
       <!-- ADD TRANSACTION -->
       <section class="card form-card">
-        <h2 class="card-title">Add Transaction</h2>
+        <h2 class="card-title">Tambah Transaksi</h2>
         <form id="transaction-form" novalidate>
           <div class="form-group">
-            <label for="item-name">Item Name</label>
-            <input type="text" id="item-name" placeholder="e.g. Cilok" autocomplete="off" />
+            <label for="item-name">Nama Barang</label>
+            <input type="text" id="item-name" placeholder="cth. Cilok" autocomplete="off" />
             <span class="field-error" id="err-name"></span>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label for="amount">Amount ($)</label>
-              <input type="number" id="amount" placeholder="0.00" min="0.01" step="0.01" />
+              <label for="amount">Jumlah (Rp)</label>
+              <input type="number" id="amount" placeholder="0" min="1" step="1" />
               <span class="field-error" id="err-amount"></span>
             </div>
             <div class="form-group">
-              <label for="type">Type</label>
+              <label for="type">Jenis</label>
               <select id="type">
-                <option value="expense">Expense</option>
-                <option value="income">Income</option>
+                <option value="expense">Pengeluaran</option>
+                <option value="income">Pemasukan</option>
               </select>
             </div>
           </div>
 
           <div class="form-group">
-            <label for="category">Category</label>
+            <label for="category">Kategori</label>
             <div class="category-row">
               <select id="category"></select>
-              <button type="button" id="add-category-btn" class="icon-btn" title="Add custom category">＋</button>
+              <button type="button" id="add-category-btn" class="icon-btn" title="Tambah kategori baru">＋</button>
             </div>
           </div>
 
           <div class="form-group">
-            <label for="date">Date</label>
+            <label for="date">Tanggal</label>
             <input type="date" id="date" />
           </div>
 
-          <button type="submit" class="btn btn-primary btn-full">Add Transaction</button>
+          <button type="submit" class="btn btn-primary btn-full">Tambah Transaksi</button>
         </form>
 
         <!-- Budget limit setter -->
         <div class="budget-setter">
-          <label for="budget-limit">Budget Limit ($)</label>
+          <label for="budget-limit">Batas Anggaran (Rp)</label>
           <div class="budget-row">
-            <input type="number" id="budget-limit" placeholder="e.g. 500" min="0" step="1" />
-            <button id="set-budget-btn" class="btn btn-secondary">Set</button>
+            <input type="number" id="budget-limit" placeholder="cth. 500000" min="0" step="1000" />
+            <button id="set-budget-btn" class="btn btn-secondary">Atur</button>
           </div>
         </div>
       </section>
 
       <!-- PIE CHART -->
       <section class="card chart-card">
-        <h2 class="card-title">Spending by Category</h2>
+        <h2 class="card-title">Pengeluaran per Kategori</h2>
         <div class="chart-wrap">
-          <canvas id="pie-chart" aria-label="Spending by category pie chart" role="img"></canvas>
-          <div id="chart-empty" class="chart-empty">No expense data yet</div>
+          <canvas id="pie-chart" aria-label="Grafik pengeluaran per kategori" role="img"></canvas>
+          <div id="chart-empty" class="chart-empty">Belum ada data pengeluaran</div>
         </div>
         <div id="chart-legend" class="chart-legend"></div>
       </section>
@@ -110,7 +110,7 @@
     <!-- MONTHLY SUMMARY -->
     <section class="card monthly-card">
       <div class="monthly-header">
-        <h2 class="card-title">Monthly Summary</h2>
+        <h2 class="card-title">Ringkasan Bulanan</h2>
         <div class="month-nav">
           <button id="prev-month" class="icon-btn">‹</button>
           <span id="month-label" class="month-label"></span>
@@ -119,19 +119,19 @@
       </div>
       <div class="monthly-stats" id="monthly-stats">
         <div class="mstat">
-          <div class="mstat-label">Income</div>
-          <div class="mstat-value income" id="m-income">$0.00</div>
+          <div class="mstat-label">Pemasukan</div>
+          <div class="mstat-value income" id="m-income">Rp0</div>
         </div>
         <div class="mstat">
-          <div class="mstat-label">Expenses</div>
-          <div class="mstat-value expense" id="m-expense">$0.00</div>
+          <div class="mstat-label">Pengeluaran</div>
+          <div class="mstat-value expense" id="m-expense">Rp0</div>
         </div>
         <div class="mstat">
-          <div class="mstat-label">Net</div>
-          <div class="mstat-value" id="m-net">$0.00</div>
+          <div class="mstat-label">Selisih</div>
+          <div class="mstat-value" id="m-net">Rp0</div>
         </div>
         <div class="mstat">
-          <div class="mstat-label">Transactions</div>
+          <div class="mstat-label">Transaksi</div>
           <div class="mstat-value" id="m-count">0</div>
         </div>
       </div>
@@ -140,21 +140,21 @@
     <!-- TRANSACTIONS LIST -->
     <section class="card list-card">
       <div class="list-header">
-        <h2 class="card-title">Transactions</h2>
+        <h2 class="card-title">Daftar Transaksi</h2>
         <div class="list-controls">
-          <select id="sort-select" aria-label="Sort transactions">
-            <option value="date-desc">Newest First</option>
-            <option value="date-asc">Oldest First</option>
-            <option value="amount-desc">Amount ↓</option>
-            <option value="amount-asc">Amount ↑</option>
-            <option value="category">Category A–Z</option>
+          <select id="sort-select" aria-label="Urutkan transaksi">
+            <option value="date-desc">Terbaru Dulu</option>
+            <option value="date-asc">Terlama Dulu</option>
+            <option value="amount-desc">Jumlah ↓</option>
+            <option value="amount-asc">Jumlah ↑</option>
+            <option value="category">Kategori A–Z</option>
           </select>
-          <button id="clear-all-btn" class="btn btn-danger-outline">Clear All</button>
+          <button id="clear-all-btn" class="btn btn-danger-outline">Hapus Semua</button>
         </div>
       </div>
 
       <div id="transaction-list" class="transaction-list">
-        <div id="list-empty" class="list-empty">No transactions yet. Add one above! 👆</div>
+        <div id="list-empty" class="list-empty">Belum ada transaksi. Tambahkan di atas! 👆</div>
       </div>
     </section>
 
@@ -163,11 +163,11 @@
   <!-- Add Category Modal -->
   <div id="cat-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="cat-modal-title">
     <div class="modal">
-      <h3 id="cat-modal-title" class="modal-title">Add Custom Category</h3>
-      <input type="text" id="cat-input" class="modal-input" placeholder="Category name..." maxlength="30" />
+      <h3 id="cat-modal-title" class="modal-title">Tambah Kategori Baru</h3>
+      <input type="text" id="cat-input" class="modal-input" placeholder="Nama kategori..." maxlength="30" />
       <div class="modal-actions">
-        <button id="cat-cancel" class="btn btn-secondary">Cancel</button>
-        <button id="cat-confirm" class="btn btn-primary">Add</button>
+        <button id="cat-cancel" class="btn btn-secondary">Batal</button>
+        <button id="cat-confirm" class="btn btn-primary">Tambah</button>
       </div>
     </div>
   </div>

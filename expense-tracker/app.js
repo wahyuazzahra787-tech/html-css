@@ -25,12 +25,12 @@ const CHART_COLORS = [
   '#84cc16','#a855f7','#ef4444','#22c55e','#eab308',
 ];
 
-const DEFAULT_CATEGORIES = ['Food','Transport','Fun','Shopping','Health','Education','Bills','Other'];
+const DEFAULT_CATEGORIES = ['Makanan','Transportasi','Hiburan','Belanja','Kesehatan','Pendidikan','Tagihan','Lainnya'];
 
 const CATEGORY_ICONS = {
-  food:       '🍔', transport: '🚗', fun:       '🎮',
-  shopping:   '🛍️', health:    '💊', education: '📚',
-  bills:      '📄', other:     '💰', income:    '💵',
+  makanan:      '🍔', transportasi: '🚗', hiburan:    '🎮',
+  belanja:      '🛍️', kesehatan:   '💊', pendidikan: '📚',
+  tagihan:      '📄', lainnya:      '💰', income:     '💵',
 };
 
 /* ─── STATE ──────────────────────────────────────────── */
@@ -131,7 +131,7 @@ function monthKey(date) {
 }
 
 function monthLabel(date) {
-  return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+  return date.toLocaleString('id-ID', { month: 'long', year: 'numeric' });
 }
 
 /* ─── CATEGORIES ─────────────────────────────────────── */
@@ -166,14 +166,14 @@ function validate() {
   els.amount.classList.remove('error');
 
   if (!els.itemName.value.trim()) {
-    els.errName.textContent = 'Item name is required.';
+    els.errName.textContent = 'Nama barang wajib diisi.';
     els.itemName.classList.add('error');
     valid = false;
   }
 
   const amt = parseFloat(els.amount.value);
   if (!els.amount.value || isNaN(amt) || amt <= 0) {
-    els.errAmount.textContent = 'Enter a valid amount greater than 0.';
+    els.errAmount.textContent = 'Masukkan jumlah yang valid (lebih dari 0).';
     els.amount.classList.add('error');
     valid = false;
   }
@@ -215,7 +215,7 @@ function deleteTransaction(id) {
 /* ─── CLEAR ALL ──────────────────────────────────────── */
 function clearAll() {
   if (!transactions.length) return;
-  if (!confirm('Delete ALL transactions? This cannot be undone.')) return;
+  if (!confirm('Hapus SEMUA transaksi? Tindakan ini tidak bisa dibatalkan.')) return;
   transactions = [];
   saveTransactions();
   renderAll();
@@ -233,7 +233,7 @@ function calcTotals() {
 
 function fmt(n) {
   const sign = n < 0 ? '-' : '';
-  return `${sign}$${Math.abs(n).toFixed(2)}`;
+  return `${sign}Rp${Math.abs(n).toLocaleString('id-ID')}`;
 }
 
 /* ─── RENDER BALANCE ─────────────────────────────────── */
@@ -313,7 +313,7 @@ function renderChart() {
               label: ctx => {
                 const total = ctx.dataset.data.reduce((a,b) => a+b, 0);
                 const pct   = ((ctx.parsed / total) * 100).toFixed(1);
-                return ` ${ctx.label}: $${ctx.parsed.toFixed(2)} (${pct}%)`;
+                return ` ${ctx.label}: Rp${ctx.parsed.toLocaleString('id-ID')} (${pct}%)`;
               },
             },
           },
@@ -394,8 +394,8 @@ function renderList() {
             <span class="tx-date">${formatDate(tx.date)}</span>
           </div>
         </div>
-        <div class="tx-amount ${cls}">${sign}$${tx.amount.toFixed(2)}</div>
-        <button class="tx-delete" data-id="${tx.id}" aria-label="Delete ${escHtml(tx.name)}">Delete</button>
+        <div class="tx-amount ${cls}">${sign}Rp${tx.amount.toLocaleString('id-ID')}</div>
+        <button class="tx-delete" data-id="${tx.id}" aria-label="Hapus ${escHtml(tx.name)}">Hapus</button>
       </div>`;
   }).join('');
 
