@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – Pencatat Pengeluaran</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── LOGIN PAGE SPECIFIC ── */
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+      padding: 20px;
+    }
+
+    .login-wrap {
+      width: 100%;
+      max-width: 420px;
+      animation: fadeUp .4s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .login-logo .logo-icon {
+      font-size: 48px;
+      display: block;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,.2));
+    }
+
+    .login-logo h1 {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -.3px;
+      text-shadow: 0 2px 8px rgba(0,0,0,.2);
+    }
+
+    .login-logo p {
+      font-size: 13px;
+      color: rgba(255,255,255,.75);
+      margin-top: 4px;
+    }
+
+    .login-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px 28px 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    }
+
+    [data-theme="dark"] .login-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+    }
+
+    /* Tab switch */
+    .login-tabs {
+      display: flex;
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 24px;
+      gap: 4px;
+    }
+
+    [data-theme="dark"] .login-tabs {
+      background: #0f172a;
+    }
+
+    .login-tab {
+      flex: 1;
+      padding: 9px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #94a3b8;
+      border-radius: 9px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: .2s;
+    }
+
+    .login-tab.active {
+      background: #fff;
+      color: #6366f1;
+      box-shadow: 0 1px 6px rgba(0,0,0,.1);
+    }
+
+    [data-theme="dark"] .login-tab.active {
+      background: #1e293b;
+      color: #818cf8;
+    }
+
+    .login-card .form-group {
+      margin-bottom: 16px;
+    }
+
+    .login-card label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+
+    [data-theme="dark"] .login-card label {
+      color: #94a3b8;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      padding: 11px 40px 11px 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      background: #f8fafc;
+      color: #1e293b;
+      font-size: 14px;
+      outline: none;
+      transition: .2s;
+    }
+
+    [data-theme="dark"] .input-wrap input {
+      background: #0f172a;
+      border-color: #334155;
+      color: #f1f5f9;
+    }
+
+    .input-wrap input:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99,102,241,.15);
+      background: #fff;
+    }
+
+    [data-theme="dark"] .input-wrap input:focus {
+      background: #1e293b;
+    }
+
+    .input-wrap input.error {
+      border-color: #ef4444;
+    }
+
+    .toggle-pw {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: #94a3b8;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .field-err {
+      font-size: 11px;
+      color: #ef4444;
+      margin-top: 4px;
+      min-height: 15px;
+      display: block;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 6px;
+      box-shadow: 0 4px 16px rgba(99,102,241,.35);
+      transition: .15s;
+    }
+
+    .login-btn:hover { filter: brightness(1.08); }
+    .login-btn:active { transform: scale(.97); }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: #cbd5e1;
+      font-size: 12px;
+    }
+
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e2e8f0;
+    }
+
+    [data-theme="dark"] .login-divider::before,
+    [data-theme="dark"] .login-divider::after {
+      background: #334155;
+    }
+
+    .guest-btn {
+      width: 100%;
+      padding: 11px;
+      background: transparent;
+      color: #6366f1;
+      font-size: 14px;
+      font-weight: 700;
+      border: 1.5px solid #6366f1;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: .15s;
+    }
+
+    .guest-btn:hover { background: #eef2ff; }
+
+    [data-theme="dark"] .guest-btn {
+      color: #818cf8;
+      border-color: #818cf8;
+    }
+
+    [data-theme="dark"] .guest-btn:hover { background: #1e1b4b; }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      color: rgba(255,255,255,.7);
+    }
+
+    /* toast */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e293b;
+      color: #fff;
+      padding: 11px 22px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 999;
+      white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(0,0,0,.2);
+      animation: fadeUp .25s ease;
+    }
+
+    .toast.success { background: #059669; }
+    .toast.error   { background: #dc2626; }
+
+    /* theme toggle */
+    .theme-float {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: rgba(255,255,255,.2);
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 17px;
+      color: #fff;
+      backdrop-filter: blur(8px);
+      transition: .2s;
+    }
+
+    .theme-float:hover { background: rgba(255,255,255,.3); }
+
+    /* panel hide/show */
+    .panel { display: none; }
+    .panel.active { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- Theme toggle -->
+  <button class="theme-float" id="theme-toggle" title="Ganti tema">🌙</button>
+
+  <div class="login-wrap">
+
+    <!-- Logo -->
+    <div class="login-logo">
+      <span class="logo-icon">💸</span>
+      <h1>Pencatat Pengeluaran</h1>
+      <p>Catat, kelola, dan analisis keuanganmu</p>
+    </div>
+
+    <!-- Card -->
+    <div class="login-card">
+
+      <!-- Tabs -->
+      <div class="login-tabs">
+        <button class="login-tab active" id="tab-masuk" onclick="switchTab('masuk')">Masuk</button>
+        <button class="login-tab" id="tab-daftar" onclick="switchTab('daftar')">Daftar</button>
+      </div>
+
+      <!-- ── PANEL LOGIN ── -->
+      <div class="panel active" id="panel-masuk">
+        <form id="form-masuk" novalidate>
+
+          <div class="form-group">
+            <label for="masuk-user">Username atau Email</label>
+            <div class="input-wrap">
+              <input type="text" id="masuk-user" placeholder="Masukkan username..." autocomplete="username" />
+            </div>
+            <span class="field-err" id="err-masuk-user"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="masuk-pw">Kata Sandi</label>
+            <div class="input-wrap">
+              <input type="password" id="masuk-pw" placeholder="Masukkan kata sandi..." autocomplete="current-password" />
+              <button type="button" class="toggle-pw" onclick="togglePw('masuk-pw', this)">👁</button>
+            </div>
+            <span class="field-err" id="err-masuk-pw"></span>
+          </div>
+
+          <button type="submit" class="login-btn">Masuk</button>
+        </form>
+
+        <div class="login-divider">atau</div>
+        <button class="guest-btn" onclick="masukTamu()">Lanjutkan sebagai Tamu 👤</button>
+      </div>
+
+      <!-- ── PANEL DAFTAR ── -->
+      <div class="panel" id="panel-daftar">
+        <form id="form-daftar" novalidate>
+
+          <div class="form-group">
+            <label for="daftar-nama">Nama Lengkap</label>
+            <div class="input-wrap">
+              <input type="text" id="daftar-nama" placeholder="Nama lengkapmu..." autocomplete="name" />
+            </div>
+            <span class="field-err" id="err-daftar-nama"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="daftar-user">Username</label>
+            <div class="input-wrap">
+              <input type="text" id="daftar-user" placeholder="Buat username..." autocomplete="username" />
+            </div>
+            <span class="field-err" id="err-daftar-user"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="daftar-pw">Kata Sandi</label>
+            <div class="input-wrap">
+              <input type="password" id="daftar-pw" placeholder="Minimal 6 karakter..." autocomplete="new-password" />
+              <button type="button" class="toggle-pw" onclick="togglePw('daftar-pw', this)">👁</button>
+            </div>
+            <span class="field-err" id="err-daftar-pw"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="daftar-pw2">Konfirmasi Kata Sandi</label>
+            <div class="input-wrap">
+              <input type="password" id="daftar-pw2" placeholder="Ulangi kata sandi..." autocomplete="new-password" />
+              <button type="button" class="toggle-pw" onclick="togglePw('daftar-pw2', this)">👁</button>
+            </div>
+            <span class="field-err" id="err-daftar-pw2"></span>
+          </div>
+
+          <button type="submit" class="login-btn">Buat Akun</button>
+        </form>
+      </div>
+
+    </div><!-- /login-card -->
+
+    <div class="login-footer">
+      Data disimpan di browser kamu · Tidak ada server
+    </div>
+
+  </div><!-- /login-wrap -->
+
+  <script>
+    'use strict';
+
+    const USERS_KEY   = 'ebv_users';
+    const SESSION_KEY = 'ebv_session';
+
+    /* ── THEME ── */
+    const themeBtn = document.getElementById('theme-toggle');
+    const saved    = localStorage.getItem('ebv_theme') || 'light';
+    applyTheme(saved);
+
+    function applyTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
+      localStorage.setItem('ebv_theme', t);
+    }
+    themeBtn.addEventListener('click', () => {
+      applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
+
+    /* ── AUTO-REDIRECT jika sudah login ── */
+    if (localStorage.getItem(SESSION_KEY)) {
+      window.location.replace('index.html');
+    }
+
+    /* ── TAB SWITCH ── */
+    function switchTab(tab) {
+      ['masuk','daftar'].forEach(t => {
+        document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+        document.getElementById('panel-' + t).classList.toggle('active', t === tab);
+      });
+    }
+
+    /* ── TOGGLE PASSWORD ── */
+    function togglePw(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        btn.textContent = '👁';
+      }
+    }
+
+    /* ── HELPERS ── */
+    function getUsers() {
+      return JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+    }
+    function saveUsers(users) {
+      localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    }
+    function showToast(msg, type = '') {
+      const old = document.querySelector('.toast');
+      if (old) old.remove();
+      const t = document.createElement('div');
+      t.className = 'toast ' + type;
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2800);
+    }
+    function clearErr(...ids) {
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.textContent = ''; }
+        const input = document.getElementById(id.replace('err-',''));
+        if (input) input.classList.remove('error');
+      });
+    }
+    function setErr(id, msg) {
+      const el = document.getElementById('err-' + id);
+      if (el) el.textContent = msg;
+      const input = document.getElementById(id);
+      if (input) input.classList.add('error');
+    }
+
+    /* ── LOGIN ── */
+    document.getElementById('form-masuk').addEventListener('submit', function(e) {
+      e.preventDefault();
+      clearErr('masuk-user','masuk-pw');
+
+      const user = document.getElementById('masuk-user').value.trim();
+      const pw   = document.getElementById('masuk-pw').value;
+      let valid  = true;
+
+      if (!user) { setErr('masuk-user', 'Username wajib diisi.'); valid = false; }
+      if (!pw)   { setErr('masuk-pw',   'Kata sandi wajib diisi.'); valid = false; }
+      if (!valid) return;
+
+      const users   = getUsers();
+      const matched = users.find(u => (u.username === user || u.nama === user) && u.password === pw);
+
+      if (!matched) {
+        setErr('masuk-pw', 'Username atau kata sandi salah.');
+        showToast('Login gagal. Coba lagi.', 'error');
+        return;
+      }
+
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ username: matched.username, nama: matched.nama }));
+      showToast('Selamat datang, ' + matched.nama + '! 👋', 'success');
+      setTimeout(() => window.location.replace('index.html'), 1000);
+    });
+
+    /* ── DAFTAR ── */
+    document.getElementById('form-daftar').addEventListener('submit', function(e) {
+      e.preventDefault();
+      clearErr('daftar-nama','daftar-user','daftar-pw','daftar-pw2');
+
+      const nama  = document.getElementById('daftar-nama').value.trim();
+      const user  = document.getElementById('daftar-user').value.trim();
+      const pw    = document.getElementById('daftar-pw').value;
+      const pw2   = document.getElementById('daftar-pw2').value;
+      let valid   = true;
+
+      if (!nama)           { setErr('daftar-nama', 'Nama wajib diisi.'); valid = false; }
+      if (!user)           { setErr('daftar-user', 'Username wajib diisi.'); valid = false; }
+      if (pw.length < 6)   { setErr('daftar-pw',   'Minimal 6 karakter.'); valid = false; }
+      if (pw !== pw2)      { setErr('daftar-pw2',  'Kata sandi tidak cocok.'); valid = false; }
+      if (!valid) return;
+
+      const users = getUsers();
+      if (users.find(u => u.username === user)) {
+        setErr('daftar-user', 'Username sudah digunakan.');
+        return;
+      }
+
+      users.push({ nama, username: user, password: pw });
+      saveUsers(users);
+
+      showToast('Akun berhasil dibuat! Silakan masuk.', 'success');
+      setTimeout(() => switchTab('masuk'), 1200);
+
+      // isi otomatis form login
+      setTimeout(() => {
+        document.getElementById('masuk-user').value = user;
+        document.getElementById('masuk-pw').value   = pw;
+      }, 1300);
+    });
+
+    /* ── TAMU ── */
+    function masukTamu() {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ username: 'tamu', nama: 'Tamu' }));
+      window.location.replace('index.html');
+    }
+  </script>
+</body>
+</html>

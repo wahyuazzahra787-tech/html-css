@@ -534,4 +534,29 @@ function bindEvents() {
 }
 
 /* ─── BOOTSTRAP ──────────────────────────────────────── */
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', () => {
+  // Cek session — redirect ke login kalau belum login
+  const SESSION_KEY = 'ebv_session';
+  const session = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+  if (!session) {
+    window.location.replace('login.html');
+    return;
+  }
+
+  // Tampilkan nama user di header
+  const badge = document.getElementById('user-badge');
+  if (badge) badge.textContent = '👤 ' + session.nama;
+
+  // Tombol logout
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      if (confirm('Yakin mau keluar?')) {
+        localStorage.removeItem(SESSION_KEY);
+        window.location.replace('login.html');
+      }
+    });
+  }
+
+  init();
+});
